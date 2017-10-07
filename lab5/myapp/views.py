@@ -1,7 +1,24 @@
+from django.views.generic import ListView
+from .models import *
 from django.shortcuts import render
 from django.http import HttpResponse
 
 # Create your views here.
+class UserList(ListView):
+    model = User
+    template_name = 'user_list.html'
+
+
+class HotelList(ListView):
+    model = Hotel
+    template_name = 'hotel_list.html'
+
+
+class BookingList(ListView):
+    model = Booking
+    template_name = 'booking_list.html'
+
+
 def index(request):
     lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris venenatis sem eu neque elementum semper. Aenean a quam enim. Praesent dictum, magna non tincidunt luctus, tortor tellus lobortis lorem, eu sodales felis libero sit amet nulla. Nam rhoncus faucibus fermentum. Sed nec est tellus. Vestibulum vitae volutpat sem, et ullamcorper tortor. Donec venenatis libero vel metus luctus eleifend. Praesent eleifend metus tincidunt, tempus leo a, volutpat dui." \
             "Integer mattis cursus ante, non maximus ligula pellentesque eu. Phasellus semper libero ac tortor auctor placerat. Quisque quam ipsum, gravida vitae risus at, fringilla vestibulum nibh. Donec fermentum accumsan velit vel rutrum. In imperdiet, leo nec finibus vehicula, tellus massa vehicula arcu, non feugiat leo ex ac dolor. In sagittis augue quis metus suscipit dapibus. Curabitur ultrices erat malesuada, viverra arcu ornare, accumsan est." \
@@ -28,3 +45,4 @@ def single_news(request,id):
         n['content'] = lorem
     context = {'news': news[int(id)]}
     return render(request,'single_news.html',context)
+

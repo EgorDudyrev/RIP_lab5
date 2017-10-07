@@ -10,7 +10,7 @@
     {% load static %}
     <link rel="icon" href="{% static 'img/favicon.ico'%}">
 
-    <title>{% block title %}Starter Template RIPs lab4{% endblock %}</title>
+    <title>{% block title %}Starter Template RIPs lab5{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
     
@@ -40,7 +40,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/my_app/">ЛР4</a>
+          <a class="navbar-brand" href="/my_app/">ЛР5</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <form class="navbar-form navbar-right">
@@ -67,8 +67,17 @@
       <div id="main-panel" class="col-sm-8 panels">
       {% block main_block %}<div style="text-align:center">Главная панель здесь</div>{% endblock %}
       </div>
-      <div id="side-panel" class="col-sm-3 panels">
-        {% block side_block %}<div style="text-align:center">Боковая панель здесь</div>{% endblock %}
+      <div class="col-sm-3 panels">
+          {% block side_block %}
+          <h1 style="text-align: center">Объекты БД</h1>
+          <div id="side-panel">
+              <ul>
+                  <li><a href="{% url 'user_list'%}" >Пользователи</a></li>
+                  <li><a href="{% url 'hotel_list'%}" >Отели</a></li>
+                  <li><a href="{% url 'booking_list'%}" >Бронирования</a></li>
+              </ul>
+          </div>
+          {% endblock %}
       </div>
     </div><!-- /.container -->
 

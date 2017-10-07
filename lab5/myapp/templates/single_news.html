@@ -4,7 +4,3 @@
 	{% include 'news_element.html' with n=news %}
 	<a class="btn btn-default btn-block" href="{% url 'index' %}">Назад</a>
 {% endblock %}
-
-{% block side_block %}
-	<h1 style="text-align:center">{{news.title}}</h1>
-{% endblock %}

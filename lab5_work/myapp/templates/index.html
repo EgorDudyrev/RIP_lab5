@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Index page{% endblock %}
+{% block main_block %}
+{% for news in news_list %}
+	{% include 'news_element.html' with n=news%}
+	{% if news.id == 2  %}
+		<div class='alert alert-danger'><h5 style="text-align:center">Too much news for today</h5>
+		</div>
+	{% endif %}
+{% endfor %}
+{% endblock %}

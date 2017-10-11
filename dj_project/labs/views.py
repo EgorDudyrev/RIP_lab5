@@ -33,41 +33,40 @@ def registration(request):
 
 
 def registration_dumb(request):
-    errors = []
+    errors = {}
     if request.method == 'POST':
         username = request.POST.get('username')
         if not username:
-            errors.append('Введите логин')
+            errors['uname']='Введите логин'
         elif len(username) < 5:
-            errors.append('Длина логина должна быть не меньше 5 символов')
-
-        password = request.POST.get('password')
-        if not password:
-            errors.append('Введите пароль')
-        elif len(password) < 8:
-            errors.append('Длина пароля должна быть не меньше 8 символов')
-        password_repeat = request.POST.get('password2')
-
-        if password_repeat != password_repeat:
-            errors.append('Пароли должны совпадать')
-
-        email = request.POST.get('email')
-        if not email:
-            errors.append('Введите email')
-
-        last_name = request.POST.get('last_name')
-        if not last_name:
-            errors.append('Введите фамилию')
-
-        first_name = request.POST.get('first_name')
-        if not first_name:
-            errors.append('Введите имя')
-
+            errors['uname']='Длина логина должна быть не меньше 5 символов'
         qs = UserList().get_queryset()
         for q in qs:
             if username == q.username:
-                errors.append('Такое имя пользователя уже занято')
+                errors['uname']='Такой логин уже занят'
                 break
+
+        password = request.POST.get('password')
+        if not password:
+            errors['psw']='Введите пароль'
+        elif len(password) < 8:
+            errors['psw']='Длина пароля должна быть не меньше 8 символов'
+
+        password_repeat = request.POST.get('password2')
+        if password_repeat != password_repeat:
+            errors['psw2']='Пароли должны совпадать'
+
+        email = request.POST.get('email')
+        if not email:
+            errors['email']='Введите email'
+
+        last_name = request.POST.get('last_name')
+        if not last_name:
+            errors['lname']='Введите фамилию'
+
+        first_name = request.POST.get('first_name')
+        if not first_name:
+            errors['fname']='Введите имя'
 
         if not errors:
             u = User()

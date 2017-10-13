@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import ListView
+from django import forms
+from django.contrib.auth import authenticate,login
 from .models import  *
 
 # Create your views here.
@@ -60,7 +62,6 @@ def registration_dumb(request):
             trav.user = user
             trav.first_name = first_name
             trav.last_name = last_name
-
             trav.save()
             return HttpResponseRedirect('/labs/travelers')
         else:
@@ -68,6 +69,75 @@ def registration_dumb(request):
             return render(request, 'registration_dumb.html',context)
 
     return render(request, 'registration_dumb.html',{'errors':errors})
+
+
+class RegistrationForm(forms.Form):
+    username = forms.CharField(min_length=5,label='Логин')
+    password = forms.CharField(min_length=8,widget=forms.PasswordInput, label='Пароль')
+    password2 = forms.CharField(min_length=8, widget=forms.PasswordInput, label='Повторите ввод')
+    email = forms.EmailField(label='Email')
+    last_name = forms.CharField(label='Фамилия')
+    first_name = forms.CharField(label='Имя')
+
+
+def registration_traveler(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        is_val = form.is_valid()
+        data = form.cleaned_data
+        if data['password']!=data['password2']:
+            is_val = False
+            form.add_error('password2',['Пароли должны совпадать'])
+        qs = TravelerList().get_queryset()
+        for q in qs:
+            if data['username'] == q.user.username:
+                form.add_error('username',['Такой логин уже занят'])
+                is_val = False
+                break
+
+        if is_val:
+            data = form.cleaned_data
+            user = User.objects.create_user(data['username'], data['email'], data['password'])
+            trav = Traveler()
+            trav.user = user
+            trav.first_name = data['first_name']
+            trav.last_name = data['last_name']
+            trav.save()
+            return HttpResponseRedirect('/labs/travelers')
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'registration.html',{'form':form})
+
+
+def authorization(request):
+    errors = {}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        if not username:
+            errors['uname']='Введите логин'
+        elif len(username) < 5:
+            errors['uname']='Длина логина должна быть не меньше 5 символов'
+
+        password = request.POST.get('password')
+        if not password:
+            errors['psw']='Введите пароль'
+        elif len(password) < 8:
+            errors['psw']='Длина пароля должна быть не меньше 8 символов'
+
+        user = authenticate(request, username=username, password=password)
+        #user = authenticate(request, username='petrov',password='12345678')
+
+        if not errors:
+            return HttpResponseRedirect('/labs/')
+        else:
+            context = {'errors':errors}
+            return render(request, 'authorization.html',context)
+
+    return render(request, 'authorization.html',{'errors':errors})
+
+class AutorizationForm(forms.Form):
+    pass
 
 
 def index(request):

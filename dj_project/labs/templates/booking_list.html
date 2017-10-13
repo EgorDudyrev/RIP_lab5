@@ -9,5 +9,9 @@
         Даты: {{ book.start_date }} - {{ book.end_date }}<br>
         Стоимость: {{ book.price }}
     </div>
+{%  empty %}
+    <div class="main_block_elem">
+        <h2>Пока ни одной брони</h2>
+    </div>
 {% endfor %}
 {% endblock %}

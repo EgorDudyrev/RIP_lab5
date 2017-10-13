@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^&5(9-7efrs7!=bwge-xpl=dz_z)30y96a(%584k-)rpdd3htp'
+SECRET_KEY = '9+_zz16(292_8)h$j_gns-4si-rayue*q&u11*%82!hxi%n2i('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,15 +75,8 @@ WSGI_APPLICATION = 'dj_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'NAME': 'rip_course_db',
-        'USER': 'dbuser',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': 3306,
-        'OPTIONS':{'charset':'utf8'},
-        'TEST_CHARSET': 'utf8',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -121,10 +114,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# List of created aplications
-MY_APPS = [
-    'labs'
-]
+MY_APPS = ['labs']
 INSTALLED_APPS += MY_APPS
 
 # Static files (CSS, JavaScript, Images)

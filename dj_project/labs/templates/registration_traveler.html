@@ -2,7 +2,7 @@
 
 {% block main_block %}
 <div class="main_block_elem">
-<form method="POST">
+<form method="POST" class="form-horizontal">
     <h2 style="text-align:center">Регистрация пользователя</h2>
     {% csrf_token %}
     {% for field in form %}

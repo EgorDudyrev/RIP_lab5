@@ -3,6 +3,9 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'^logout$', views.logout_view, name='logout'),
+    url(r'^success_authorization_dumb$', views.success_authorization_dumb, name='success_authorization_dumb'),
+    url(r'^success_authorization$', views.success_authorization, name='success_authorization'),
     url(r'^authorization/$', views.authorization, name='authorization'),
     url(r'^registration_dumb/$', views.registration_dumb, name='registration_dumb'),
     url(r'^registration_traveler/$',views.registration_traveler, name='registration_traveler'),

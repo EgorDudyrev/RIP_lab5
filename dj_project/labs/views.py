@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import ListView
 from django import forms
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login, logout
+from django.contrib.auth.decorators import login_required
 from .models import  *
 
 # Create your views here.
@@ -10,9 +11,11 @@ class TravelerList(ListView):
     model = Traveler
     template_name = 'traveler_list.html'
 
+
 class HotelList(ListView):
     model = Hotel
     template_name = 'hotel_list.html'
+
 
 class BookingList(ListView):
     model = Booking
@@ -103,11 +106,23 @@ def registration_traveler(request):
             trav.first_name = data['first_name']
             trav.last_name = data['last_name']
             trav.save()
-            return HttpResponseRedirect('/labs/travelers')
+            return HttpResponseRedirect('/labs/authorization')
     else:
         form = RegistrationForm()
 
-    return render(request, 'registration.html',{'form':form})
+    return render(request, 'registration_traveler.html',{'form':form})
+
+
+@login_required(login_url='/labs/authorization')
+def success_authorization(request):
+    return HttpResponseRedirect('/labs')
+
+
+def success_authorization_dumb(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/labs/')
+    else:
+        return HttpResponseRedirect('/labs/authorization')
 
 
 def authorization(request):
@@ -127,14 +142,22 @@ def authorization(request):
 
         user = authenticate(request, username=username, password=password)
         #user = authenticate(request, username='petrov',password='12345678')
+        if user is None and 'uname' not in errors.keys() and 'psw' not in errors.keys():
+            errors['login'] = 'Логин или пароль введены неправильно'
 
         if not errors:
-            return HttpResponseRedirect('/labs/')
+            login(request,user)
+            #return HttpResponseRedirect('/labs/success_authorization_dumb')
+            return HttpResponseRedirect('/labs/success_authorization')
         else:
             context = {'errors':errors}
             return render(request, 'authorization.html',context)
 
     return render(request, 'authorization.html',{'errors':errors})
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/labs/')
 
 class AutorizationForm(forms.Form):
     pass

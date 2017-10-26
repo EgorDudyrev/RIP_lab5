@@ -31,11 +31,9 @@ def registration_dumb(request):
             errors['uname']='Введите логин'
         elif len(username) < 5:
             errors['uname']='Длина логина должна быть не меньше 5 символов'
-        qs = TravelerList().get_queryset()
-        for q in qs:
-            if username == q.user.username:
-                errors['uname']='Такой логин уже занят'
-                break
+
+        if User.objects.exist(username=username):
+            errors['uname']='Такой логин уже занят'
 
         password = request.POST.get('password')
         if not password:
@@ -91,12 +89,9 @@ def registration_traveler(request):
         if data['password']!=data['password2']:
             is_val = False
             form.add_error('password2',['Пароли должны совпадать'])
-        qs = TravelerList().get_queryset()
-        for q in qs:
-            if data['username'] == q.user.username:
-                form.add_error('username',['Такой логин уже занят'])
-                is_val = False
-                break
+        if User.objects.filter(username=data['username']).exists():
+            form.add_error('username',['Такой логин уже занят'])
+            is_val = False
 
         if is_val:
             data = form.cleaned_data

@@ -32,7 +32,7 @@ def registration_dumb(request):
         elif len(username) < 5:
             errors['uname']='Длина логина должна быть не меньше 5 символов'
 
-        if User.objects.exist(username=username):
+        if User.objects.filter(username=username).exists():
             errors['uname']='Такой логин уже занят'
 
         password = request.POST.get('password')
@@ -42,7 +42,7 @@ def registration_dumb(request):
             errors['psw']='Длина пароля должна быть не меньше 8 символов'
 
         password_repeat = request.POST.get('password2')
-        if password_repeat != password_repeat:
+        if password != password_repeat:
             errors['psw2']='Пароли должны совпадать'
 
         email = request.POST.get('email')
@@ -136,7 +136,6 @@ def authorization(request):
             errors['psw']='Длина пароля должна быть не меньше 8 символов'
 
         user = authenticate(request, username=username, password=password)
-        #user = authenticate(request, username='petrov',password='12345678')
         if user is None and 'uname' not in errors.keys() and 'psw' not in errors.keys():
             errors['login'] = 'Логин или пароль введены неправильно'
 

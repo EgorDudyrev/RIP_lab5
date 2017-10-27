@@ -12,6 +12,17 @@ class User:
         self.db_connection.commit()
         c.close()
 
+    @staticmethod
+    def load_users(db_connection):
+        c = db_connection.connection.cursor()
+        c.execute("SELECT * FROM users")
+        lines = c.fetchall()
+        c.close()
+        users = [User(db_connection, l[0], l[1], l[2]) for l in lines]
+        return users
+        #return self.__init__(db_connection, line[0], line[1], line[2])
+
+
 class Hotel:
     def __init__(self, db_connection, name, phone,adress,description=None):
         self.db_connection = db_connection.connection

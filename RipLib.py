@@ -20,7 +20,6 @@ class User:
         c.close()
         users = [User(db_connection, l[0], l[1], l[2]) for l in lines]
         return users
-        #return self.__init__(db_connection, line[0], line[1], line[2])
 
 
 class Hotel:
